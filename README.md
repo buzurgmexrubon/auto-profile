@@ -46,6 +46,9 @@ API_ID=your_telegram_api_id             # Required, from my.telegram.org
 API_HASH=your_telegram_api_hash         # Required
 PHONE_NUMBER=your_phone_number          # Required, in international format
 
+# Display name used in your Telegram profile's first_name field
+NAME=your_name                           # Required – e.g., Buzruk
+
 WEATHER_API_KEY=openweather_api_key     # Required, from openweathermap.org
 LAT=41.311081                           # Required, your city’s latitude
 LON=69.240562                           # Required, your city’s longitude

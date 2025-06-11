@@ -1,0 +1,17 @@
+[Unit]
+Description=AutoProfile Updater for Telegram
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/your/project
+ExecStart=/path/to/your/project/.venv/bin/python main.py
+Environment=/path/to/your/project/.venv/bin
+
+Restart=always
+RestartSec=5
+User=your_linux_username
+Group=your_linux_username
+
+[Install]
+WantedBy=multi-user.target

@@ -45,7 +45,7 @@ def generate_display_fields():
         logger.warning(f"Failed to fetch or format weather data: {e}")
 
     # Assemble the final fields
-    first_name = f"Buzruk | {status} | {dt}"
+    first_name = f"{config.NAME} | {status} | {dt}"
     last_name = f"{date} | {hijri}"
     bio = f"{prayer}\n{weather}"
 
