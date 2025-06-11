@@ -58,7 +58,7 @@ CITY=Tashkent                           # Required, your city name in English
 ## 🐳 Docker (Recommended)
 
 ```bash
-git clone https://github.com/buzurgmexrubon/autoprofile.git
+git clone https://github.com/buzurgmexrubon/auto-profile.git
 cd autoprofile
 cp .env.example .env   # Fill in the required values
 ```
@@ -83,7 +83,7 @@ docker run --env-file=.env -v C:/path/to/timezone:/etc/timezone:ro autoprofile
 ### Linux/macOS
 
 ```bash
-git clone https://github.com/buzurgmexrubon/autoprofile.git
+git clone https://github.com/buzurgmexrubon/auto-profile.git
 cd autoprofile
 cp .env.example .env
 python3 -m venv venv
@@ -95,7 +95,7 @@ python main.py
 ### Windows
 
 ```cmd
-git clone https://github.com/buzurgmexrubon/autoprofile.git
+git clone https://github.com/buzurgmexrubon/auto-profile.git
 cd autoprofile
 copy .env.example .env
 python -m venv venv
@@ -132,9 +132,3 @@ Make sure `.env` file is placed and readable from the working directory inside t
 
 We welcome contributions!
 Please read [`CONTRIBUTING.md`](CONTRIBUTING.md) before submitting a pull request or issue.
-
----
-
-## 📝 License
-
-MIT License © 2025
