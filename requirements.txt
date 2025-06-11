@@ -1,0 +1,7 @@
+APScheduler==3.11.0
+loguru==0.7.3
+python-dotenv==1.1.0
+pytz==2025.2
+requests==2.32.4
+Telethon==1.40.0
+tenacity==9.1.2
