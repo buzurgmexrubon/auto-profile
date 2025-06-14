@@ -26,7 +26,7 @@ def _safe_float(key: str, default: float = 0.0) -> float:
 # Telegram API credentials
 API_ID = _safe_int("API_ID")
 API_HASH = os.getenv("API_HASH", "")
-PHONE_NUMBER = _safe_int("PHONE_NUMBER")
+PHONE_NUMBER = os.getenv("PHONE_NUMBER")
 
 # Your display name
 NAME = os.getenv("NAME", "")
