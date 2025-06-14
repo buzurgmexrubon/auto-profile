@@ -1,10 +1,11 @@
 import os
 import asyncio
 from datetime import datetime
-from telethon import TelegramClient, functions
+from telethon import TelegramClient, functions, types
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from loguru import logger
 import pytz
+from PIL import Image
 
 import config
 from utils.bio_utils import generate_display_fields
@@ -24,10 +25,11 @@ PROFILE_PIC_DIR = "profile_pics"
 async def update_profile_photo(client: TelegramClient):
     """
     Updates Telegram profile photo based on current weekday (e.g., mon.jpg).
+    Deletes old profile photo before uploading new one.
     """
     tz = pytz.timezone(config.TIMEZONE)
     now = datetime.now(tz)
-    weekday = now.strftime("%a").lower()  # e.g., mon, tue, ...
+    weekday = now.strftime("%a").lower()
     filename = f"{weekday}.jpg"
     path = os.path.join(PROFILE_PIC_DIR, filename)
 
@@ -36,9 +38,44 @@ async def update_profile_photo(client: TelegramClient):
         return
 
     try:
+        # 1. Validate image
+        try:
+            img = Image.open(path)
+            img.verify()
+        except Exception as e:
+            logger.error(f"Invalid image file: {path} — {e}")
+            return
+
+        # 2. Delete old profile photos
+        result = await client(
+            functions.photos.GetUserPhotosRequest(
+                user_id="me", offset=0, max_id=0, limit=10
+            )
+        )
+        if result.photos:
+            photo_ids = []
+            for photo in result.photos:
+                if (
+                    hasattr(photo, "id")
+                    and hasattr(photo, "access_hash")
+                    and hasattr(photo, "file_reference")
+                ):
+                    input_photo = types.InputPhoto(
+                        id=photo.id,
+                        access_hash=photo.access_hash,
+                        file_reference=photo.file_reference,
+                    )
+                    photo_ids.append(input_photo)
+
+            if photo_ids:
+                await client(functions.photos.DeletePhotosRequest(id=photo_ids))
+                logger.info(f"Deleted {len(photo_ids)} old profile photo(s).")
+
+        # 3. Upload new photo
         file = await client.upload_file(path)
-        await client(functions.photos.UploadProfilePhotoRequest(file))
+        await client(functions.photos.UploadProfilePhotoRequest(file=file))
         logger.info(f"Profile photo updated: {filename}")
+
     except Exception as e:
         logger.error(f"Failed to update profile photo: {e}")
 
@@ -75,9 +112,13 @@ async def start_scheduler(client: TelegramClient):
     Starts the APScheduler to periodically update profile and photo.
     """
     scheduler = AsyncIOScheduler()
+
     # Update profile every 1 minute
     scheduler.add_job(update_profile, "interval", minutes=1, args=[client])
+
     # Update profile photo at midnight (00:00)
+    # NOTE: Make sure you add your pictures to profile_pics folder
+    # NOTE: update_profile_photo delete your old profile picture
     scheduler.add_job(update_profile_photo, "cron", hour=0, minute=0, args=[client])
     scheduler.start()
 
