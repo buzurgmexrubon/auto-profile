@@ -96,7 +96,7 @@ async def update_profile(client: TelegramClient):
                     first_name=first_name, last_name=last_name, about=bio
                 )
             )
-            logger.info(f"{now.strftime('%H:%M:%S')} — Profile updated successfully.")
+            # logger.info(f"{now.strftime('%H:%M:%S')} — Profile updated successfully.")
             break
         except Exception as e:
             logger.warning(
